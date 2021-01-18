@@ -24,14 +24,18 @@ const Chat = ({ location }) => {
     setName(name);
     setRoom(room);
 
-    socket.emit("join", { name, room }, () => {});
-  }, [ENDPOINT, location.search]);
+    socket.emit("join", { name, room }, (error) => {
+      if (error) {
+        console.log(error);
+      }
+    });
+  }, [location.search]);
 
   useEffect(() => {
     socket.on("message", (message) => {
-      setMessages([...messages, message]);
+      setMessages((messages) => [...messages, message]);
     });
-  }, [messages]);
+  }, []);
 
   const sendMessage = (e) => {
     e.preventDefault();
